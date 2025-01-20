@@ -29,12 +29,17 @@ public class LoginUIManager : MonoBehaviour
 
         Debug.Log($"Email: {email}, Password: {password}");
 
-        StartCoroutine(ValidateLoginAsync(email, password, (message, token) =>
+        StartCoroutine(ValidateLoginAsync(email, password, (message, token, userId) =>
         {
             if (token != null)
             {
                 // Connexion réussie
-                Debug.Log("Login réussi ! Token: " + token);
+                Debug.Log($"Login réussi ! Token: {token}, ID de l'utilisateur: {userId}");
+
+                // Stocker l'ID utilisateur si nécessaire
+                GameManager.Instance.userId = userId;
+
+                // Charger la scène des statistiques
                 GameManager.Instance.LoadScene("StatisticsScene");
             }
             else
@@ -52,7 +57,7 @@ public class LoginUIManager : MonoBehaviour
     /// <param name="password"></param>
     /// <param name="onComplete"></param>
     /// <returns></returns>
-    private IEnumerator ValidateLoginAsync(string email, string password, System.Action<string, string> onComplete)
+    private IEnumerator ValidateLoginAsync(string email, string password, System.Action<string, string, string> onComplete)
     {
         var loginData = new LoginData
         {
@@ -78,12 +83,12 @@ public class LoginUIManager : MonoBehaviour
             string jsonResponse = request.downloadHandler.text;
             ApiResponse response = JsonUtility.FromJson<ApiResponse>(jsonResponse);
 
-            // Appeler le callback avec le message et le token
-            onComplete?.Invoke(response.message, response.token);
+            // Appeler le callback avec le message, le token et l'ID
+            onComplete?.Invoke(response.message, response.token, response.id);
         }
         else
         {
-            onComplete?.Invoke("Erreur de connexion: " + request.error, null);
+            onComplete?.Invoke("Erreur de connexion: " + request.error, null, null);
         }
     }
 
@@ -105,5 +110,6 @@ public class LoginUIManager : MonoBehaviour
     {
         public string message;
         public string token;
+        public string id;  // Ajouter un champ pour l'ID de l'utilisateur
     }
 }

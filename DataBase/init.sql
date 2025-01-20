@@ -11,7 +11,8 @@ CREATE TABLE users (
     name VARCHAR(100) NOT NULL,
     email VARCHAR(150) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    winRate DECIMAL(2,2) NOT NULL,
+    wins INT(11) NOT NULL DEFAULT 0,
+    losses INT(11) NOT NULL DEFAULT 0,
     account_creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

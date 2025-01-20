@@ -3,4 +3,6 @@
     <engine:ScrollView>
         <engine:VisualElement name="tableContainer" style="flex-grow: 1;" />
     </engine:ScrollView>
+    <engine:VisualElement style="flex-grow: 1;" />
+    <engine:Button text="Add comment" name="commentary" />
 </engine:UXML>

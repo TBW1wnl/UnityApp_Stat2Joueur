@@ -8,6 +8,7 @@ public class LoginUIManager : MonoBehaviour
     private TextField emailField;
     private TextField passwordField;
     private Button validateButton;
+    private Button registerButton;
 
     private string apiUrl = "http://localhost/api/login";
 
@@ -18,8 +19,15 @@ public class LoginUIManager : MonoBehaviour
         emailField = root.Q<TextField>("email");
         passwordField = root.Q<TextField>("password");
         validateButton = root.Q<Button>("login");
+        registerButton = root.Q<Button>("register");
 
         validateButton.clicked += OnValidateButtonClicked;
+        registerButton.clicked += registerButton;
+    }
+
+    private void registerButton()
+    {
+        GameManager.Instance.LoadScene("RegisterScene");
     }
 
     private void OnValidateButtonClicked()
@@ -36,7 +44,7 @@ public class LoginUIManager : MonoBehaviour
                 // Connexion réussie
                 Debug.Log($"Login réussi ! Token: {token}, ID de l'utilisateur: {userId}");
 
-                // Stocker l'ID utilisateur si nécessaire
+                GameManager.Instance.token = token;
                 GameManager.Instance.userId = userId;
 
                 // Charger la scène des statistiques
@@ -110,6 +118,6 @@ public class LoginUIManager : MonoBehaviour
     {
         public string message;
         public string token;
-        public string id;  // Ajouter un champ pour l'ID de l'utilisateur
+        public string id; 
     }
 }

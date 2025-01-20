@@ -8,6 +8,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LoginScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/Scenes/StatisticsScene.unity
+    guid: 4d8cb5461a6b94041a592d9a04860061
+  - enabled: 1
+    path: Assets/Scenes/CommentsScene.unity
+    guid: 85fb30e95954b24469f5af2ea333d36f
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

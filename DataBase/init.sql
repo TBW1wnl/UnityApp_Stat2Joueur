@@ -2,7 +2,7 @@ CREATE DATABASE IF NOT EXISTS UserStatsProject;
 
 CREATE OR REPLACE USER 'UnityUser'@'localhost' IDENTIFIED BY 'Unity123*';
 
-GRANT ALL PRIVILEGES ON UserStatsProject.* TO 'UnityUser'@'localhost';
+GRANT ALL PRIVILEGES ON *.* TO 'UnityUser'@'localhost';
 
 USE UserStatsProject;
 

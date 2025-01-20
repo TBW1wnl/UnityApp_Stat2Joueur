@@ -8,6 +8,7 @@ public class LoginUIManager : MonoBehaviour
     private TextField emailField;
     private TextField passwordField;
     private Button validateButton;
+    private Button registerButton;
 
     private string apiUrl = "http://localhost/api/login";
 
@@ -18,8 +19,15 @@ public class LoginUIManager : MonoBehaviour
         emailField = root.Q<TextField>("email");
         passwordField = root.Q<TextField>("password");
         validateButton = root.Q<Button>("login");
+        registerButton = root.Q<Button>("register");
 
         validateButton.clicked += OnValidateButtonClicked;
+        registerButton.clicked += registerButton;
+    }
+
+    private void registerButton()
+    {
+        GameManager.Instance.LoadScene("RegisterScene");
     }
 
     private void OnValidateButtonClicked()
@@ -29,12 +37,17 @@ public class LoginUIManager : MonoBehaviour
 
         Debug.Log($"Email: {email}, Password: {password}");
 
-        StartCoroutine(ValidateLoginAsync(email, password, (message, token) =>
+        StartCoroutine(ValidateLoginAsync(email, password, (message, token, userId) =>
         {
             if (token != null)
             {
                 // Connexion réussie
-                Debug.Log("Login réussi ! Token: " + token);
+                Debug.Log($"Login réussi ! Token: {token}, ID de l'utilisateur: {userId}");
+
+                GameManager.Instance.token = token;
+                GameManager.Instance.userId = userId;
+
+                // Charger la scène des statistiques
                 GameManager.Instance.LoadScene("StatisticsScene");
             }
             else
@@ -52,7 +65,7 @@ public class LoginUIManager : MonoBehaviour
     /// <param name="password"></param>
     /// <param name="onComplete"></param>
     /// <returns></returns>
-    private IEnumerator ValidateLoginAsync(string email, string password, System.Action<string, string> onComplete)
+    private IEnumerator ValidateLoginAsync(string email, string password, System.Action<string, string, string> onComplete)
     {
         var loginData = new LoginData
         {
@@ -78,12 +91,12 @@ public class LoginUIManager : MonoBehaviour
             string jsonResponse = request.downloadHandler.text;
             ApiResponse response = JsonUtility.FromJson<ApiResponse>(jsonResponse);
 
-            // Appeler le callback avec le message et le token
-            onComplete?.Invoke(response.message, response.token);
+            // Appeler le callback avec le message, le token et l'ID
+            onComplete?.Invoke(response.message, response.token, response.id);
         }
         else
         {
-            onComplete?.Invoke("Erreur de connexion: " + request.error, null);
+            onComplete?.Invoke("Erreur de connexion: " + request.error, null, null);
         }
     }
 
@@ -105,5 +118,6 @@ public class LoginUIManager : MonoBehaviour
     {
         public string message;
         public string token;
+        public string id; 
     }
 }
